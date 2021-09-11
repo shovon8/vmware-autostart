@@ -1,0 +1,18 @@
+[Unit]
+Description=Automatically Start VMware Virtual Machine
+After=network.target vmware.service
+Requires=network.target vmware.service
+Conflicts=shutdown.target
+Before=shutdown.target multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/vmware-autostart/bin/autostart start
+ExecStop=/opt/vmware-autostart/bin/autostart suspend
+Restart=no
+RemainAfterExit=yes
+User=shovon
+Group=shovon
+
+[Install]
+WantedBy=multi-user.target

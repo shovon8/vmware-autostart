@@ -1,0 +1,14 @@
+{
+  "vms": [
+    {
+      "name": "vm-1",
+      "vmxpath": "/vmware/vm-1/vm-1.vmx",
+      "autostart": true
+    },
+    {
+      "name": "vm 2",
+      "vmxpath": "/vmware/vm 2/vm 2.vmx",
+      "autostart": true
+    }
+  ]
+}
