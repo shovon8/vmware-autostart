@@ -35,6 +35,15 @@ config_file=/opt/vmware-autostart/config.json
 num_vms=$(jq '.vms | length' < $config_file)
 action="$1"
 
+# Kill VMWare App if opened
+if [ `pidof vmware` ]; then
+    while [ `pidof vmware` ]; do 
+        PID=`pidof vmware`
+        kill $PID
+        sleep 1
+    done
+fi
+
 for ((counter=0; counter < $num_vms; counter++))
 do
   vm_name=$(jq -j ".vms[$counter].name" < $config_file)
