@@ -11,8 +11,8 @@ ExecStart=/opt/vmware-autostart/bin/autostart start
 ExecStop=/opt/vmware-autostart/bin/autostart suspend
 Restart=no
 RemainAfterExit=yes
-User=shovon
-Group=shovon
+User=yourUserName
+Group=yourUserName
 
 [Install]
 WantedBy=multi-user.target

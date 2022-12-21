@@ -2,12 +2,14 @@
   "vms": [
     {
       "name": "vm-1",
-      "vmxpath": "/vmware/vm-1/vm-1.vmx",
+      "vmx_path": "/vmware/vm-1/vm-1.vmx",
+      "vmx_password": "leave this blank if the vm isn't encrypted",
       "autostart": true
     },
     {
       "name": "vm 2",
-      "vmxpath": "/vmware/vm 2/vm 2.vmx",
+      "vmx_path": "/vmware/vm 2/vm 2.vmx",
+      "vmx_password": "",
       "autostart": true
     }
   ]

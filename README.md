@@ -1,26 +1,34 @@
+# VMware Autostart
+
 ## Introduction
 
 This program is used to start VMware Workstation 16 Virtual Machines at boot time and suspend them automatically before system shutdown or restart.
 
 ## How to Install
 
+Install the necessary packages
+
+```bash
+sudo apt install jq
+```
+
 Navigate to the `/opt` directory and clone this GitHub repository as follows:
 
-```
-$ cd /opt
-$ git clone https://github.com/shovon8/vmware-autostart.git
-$ cd /opt/vmware-autostart
+```bash
+cd /opt
+git clone https://github.com/shovon8/vmware-autostart.git
+cd /opt/vmware-autostart
 ```
 
 Make sure that the `/opt/vmware-autostart/bin/autostart` shell script is executable.
 
-```
-$ sudo chmod +x bin/autostart
+```bash
+sudo chmod +x bin/autostart
 ```
 
 Change the login `User` and `Group` to your own login `User` and `Group` name in the `vmware-autostart.service` file.
 
-```
+```bash
 [Service]
 ...
 User=<Your Login User name>
@@ -29,37 +37,39 @@ Group=<Your Primary Group name>
 
 Install the `vmware-autostart.service` systemd service.
 
-```
-$ sudo ln -s /opt/vmware-autostart/vmware-autostart.service /etc/systemd/system/vmware-autostart.service
+```bash
+sudo ln -s /opt/vmware-autostart/vmware-autostart.service /etc/systemd/system/vmware-autostart.service
 ```
 
 For the systemd changes to take effect, reload systemd daemons.
 
-```
-$ sudo systemctl daemon-reload
+```bash
+sudo systemctl daemon-reload
 ```
 
 Add the `vmware-autostart.service` to the system startup.
 
-```
-$ sudo systemctl enable vmware-autostart.service
+```bash
+sudo systemctl enable vmware-autostart.service
 ```
 
 ## Configuring Virtual Machines
 
 To automatically start VMware Workstation Pro 16 virtual machines on boot with this program, add the absolute path of the `.vmx` file of your desired virtual machines in the `config.json` file. The configuration file is self-explanatory.
 
-```
+```json
 {
   "vms": [
     {
       "name": "vm-1",
-      "vmxpath": "/vmware/vm-1/vm-1.vmx",
+      "vmx_path": "/vmware/vm-1/vm-1.vmx",
+      "vmx_password": "leave this blank if the vm isn't encrypted",
       "autostart": true
     },
     {
       "name": "vm 2",
-      "vmxpath": "/vmware/vm 2/vm 2.vmx",
+      "vmx_path": "/vmware/vm 2/vm 2.vmx",
+      "vmx_password": "",
       "autostart": true
     }
   ]
