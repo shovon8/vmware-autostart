@@ -17,7 +17,7 @@ start_vm() {
 
 suspend_vm() {
   echo "$vm_name is suspending..."
-  /usr/bin/vmrun -T ws suspend "$vmx_path" hard 2>/dev/null && echo "$vm_name suspended." || echo "$vm_name failed to suspended."
+  /usr/bin/vmrun -T ws -vp "$vmx_password" suspend "$vmx_path" hard 2>/dev/null && echo "$vm_name suspended." || echo "$vm_name failed to suspended."
 }
 
 
