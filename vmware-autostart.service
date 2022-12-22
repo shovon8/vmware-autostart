@@ -12,8 +12,7 @@ ExecStop=/opt/vmware-autostart/bin/autostart suspend
 Restart=no
 RemainAfterExit=yes
 User=yourUserName
-Group=yourUserName
-TimeoutStopSec=300
+Group=yourUserNames
 
 [Install]
 WantedBy=multi-user.target

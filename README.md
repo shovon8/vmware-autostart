@@ -33,7 +33,6 @@ Change the login `User` and `Group` to your own login `User` and `Group` name in
 ...
 User=<Your Login User name>
 Group=<Your Primary Group name>
-TimeoutStopSec=<Number of VMs * 60>
 ```
 
 Install the `vmware-autostart.service` systemd service.

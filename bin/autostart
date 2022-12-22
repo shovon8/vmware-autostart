@@ -55,14 +55,15 @@ do
 
   if [ "$action" == "start" -a "$vm_autostart" == "true" ]
   then
-    msg_auto_answer_disable && msg_auto_answer_enable && start_vm
+    msg_auto_answer_disable && msg_auto_answer_enable && start_vm &
   fi
 
   if [ "$action" == "suspend" -a "$vm_autostart" == "true" ]
   then
-    msg_auto_answer_disable && suspend_vm
+    msg_auto_answer_disable && suspend_vm &
   fi
 
 done
 
+wait
 exit 0
