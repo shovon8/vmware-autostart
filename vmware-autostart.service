@@ -13,6 +13,7 @@ Restart=no
 RemainAfterExit=yes
 User=yourUserName
 Group=yourUserName
+TimeoutStopSec=300
 
 [Install]
 WantedBy=multi-user.target
