@@ -12,12 +12,12 @@ msg_auto_answer_enable() {
 
 start_vm() {
   echo "$vm_name is starting..."
-  /usr/bin/vmrun -T ws start "$vmx_path" nogui 2>/dev/null && echo "$vm_name started." || echo "$vm_name failed to start."
+  /usr/bin/vmrun -T ws -vp "$vmx_password" start "$vmx_path" nogui 2>/dev/null && echo "$vm_name started." || echo "$vm_name failed to start."
 }
 
 suspend_vm() {
   echo "$vm_name is suspending..."
-  /usr/bin/vmrun -T ws suspend "$vmx_path" hard 2>/dev/null && echo "$vm_name suspended." || echo "$vm_name failed to suspended."
+  /usr/bin/vmrun -T ws -vp "$vmx_password" suspend "$vmx_path" hard 2>/dev/null && echo "$vm_name suspended." || echo "$vm_name failed to suspended."
 }
 
 
@@ -26,6 +26,7 @@ do_debug() {
   echo "action: $action"
   echo "vm_name: $vm_name"
   echo "vmx_path: $vmx_path"
+  echo "vmx_password: $vmx_password"
   echo "vm_autostart: $vm_autostart"
   echo "===DEBUG"
 }
@@ -37,7 +38,7 @@ action="$1"
 
 # Kill VMWare App if opened
 if [ `pidof vmware` ]; then
-    while [ `pidof vmware` ]; do 
+    while [ `pidof vmware` ]; do
         PID=`pidof vmware`
         kill $PID
         sleep 1
@@ -47,20 +48,22 @@ fi
 for ((counter=0; counter < $num_vms; counter++))
 do
   vm_name=$(jq -j ".vms[$counter].name" < $config_file)
-  vmx_path=$(jq -j ".vms[$counter].vmxpath" < $config_file)
+  vmx_path=$(jq -j ".vms[$counter].vmx_path" < $config_file)
+  vmx_password=$(jq -j ".vms[$counter].vmx_password" < $config_file)
   vm_autostart=$(jq -j ".vms[$counter].autostart" < $config_file)
 
 
   if [ "$action" == "start" -a "$vm_autostart" == "true" ]
   then
-    msg_auto_answer_disable && msg_auto_answer_enable && start_vm
+    msg_auto_answer_disable && msg_auto_answer_enable && start_vm &
   fi
 
   if [ "$action" == "suspend" -a "$vm_autostart" == "true" ]
   then
-    msg_auto_answer_disable && suspend_vm
+    msg_auto_answer_disable && suspend_vm &
   fi
 
 done
 
+wait
 exit 0
