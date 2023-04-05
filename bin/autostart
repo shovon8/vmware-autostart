@@ -1,34 +1,34 @@
 #!/bin/bash
 
 msg_auto_answer_disable() {
-  echo "disabling msg.autoAnswer for $vm_name"
-  sed -i.bak -s '/^msg\.autoAnswer/d' "$vmx_path"
+    echo "disabling msg.autoAnswer for $vm_name"
+    sed -i.bak -s '/^msg\.autoAnswer/d' "$vmx_path"
 }
 
 msg_auto_answer_enable() {
-  echo "enabling msg.autoAnswer for $vm_name"
-  echo 'msg.autoAnswer = "TRUE"' >> "$vmx_path"
+    echo "enabling msg.autoAnswer for $vm_name"
+    echo 'msg.autoAnswer = "TRUE"' >> "$vmx_path"
 }
 
 start_vm() {
-  echo "$vm_name is starting..."
-  /usr/bin/vmrun -T ws -vp "$vmx_password" start "$vmx_path" nogui 2>/dev/null && echo "$vm_name started." || echo "$vm_name failed to start."
+    echo "$vm_name is starting..."
+    /usr/bin/vmrun -T ws -vp "$vmx_password" start "$vmx_path" nogui 2>/dev/null && echo "$vm_name started." || echo "$vm_name failed to start."
 }
 
 suspend_vm() {
-  echo "$vm_name is suspending..."
-  /usr/bin/vmrun -T ws -vp "$vmx_password" suspend "$vmx_path" hard 2>/dev/null && echo "$vm_name suspended." || echo "$vm_name failed to suspended."
+    echo "$vm_name is suspending..."
+    /usr/bin/vmrun -T ws -vp "$vmx_password" suspend "$vmx_path" hard 2>/dev/null && echo "$vm_name suspended." || echo "$vm_name failed to suspended."
 }
 
 
 do_debug() {
-  echo "DEBUG==="
-  echo "action: $action"
-  echo "vm_name: $vm_name"
-  echo "vmx_path: $vmx_path"
-  echo "vmx_password: $vmx_password"
-  echo "vm_autostart: $vm_autostart"
-  echo "===DEBUG"
+    echo "DEBUG==="
+    echo "action: $action"
+    echo "vm_name: $vm_name"
+    echo "vmx_path: $vmx_path"
+    echo "vmx_password: $vmx_password"
+    echo "vm_autostart: $vm_autostart"
+    echo "===DEBUG"
 }
 
 
@@ -47,22 +47,23 @@ fi
 
 for ((counter=0; counter < $num_vms; counter++))
 do
-  vm_name=$(jq -j ".vms[$counter].name" < $config_file)
-  vmx_path=$(jq -j ".vms[$counter].vmx_path" < $config_file)
-  vmx_password=$(jq -j ".vms[$counter].vmx_password" < $config_file)
-  vm_autostart=$(jq -j ".vms[$counter].autostart" < $config_file)
-
-
-  if [ "$action" == "start" -a "$vm_autostart" == "true" ]
-  then
-    msg_auto_answer_disable && msg_auto_answer_enable && start_vm &
-  fi
-
-  if [ "$action" == "suspend" -a "$vm_autostart" == "true" ]
-  then
-    msg_auto_answer_disable && suspend_vm &
-  fi
-
+    vm_name=$(jq -j ".vms[$counter].name" < $config_file)
+    vmx_path=$(jq -j ".vms[$counter].vmx_path" < $config_file)
+    vmx_password=$(jq -j ".vms[$counter].vmx_password" < $config_file)
+    vm_autostart=$(jq -j ".vms[$counter].autostart" < $config_file)
+    
+    
+    if [ "$action" == "start" -a "$vm_autostart" == "true" ]
+    then
+        vmware-modconfig --console --install-all
+        msg_auto_answer_disable && msg_auto_answer_enable && start_vm &
+    fi
+    
+    if [ "$action" == "suspend" -a "$vm_autostart" == "true" ]
+    then
+        msg_auto_answer_disable && suspend_vm &
+    fi
+    
 done
 
 wait
